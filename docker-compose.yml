@@ -1,0 +1,27 @@
+services:
+  # Наш фронтенд (Next.js)
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+
+  # Пример первого бэкенда (FastAPI)
+  auth-service:
+    build: ./services/auth_service
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./services/auth_service:/app
+    depends_on:
+      - redis
+
+  # Общий Redis для всех
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
