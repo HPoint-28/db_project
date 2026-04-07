@@ -1,5 +1,6 @@
+version: '3.8'
+
 services:
-  # Наш фронтенд (Next.js)
   frontend:
     build: ./frontend
     ports:
@@ -10,7 +11,6 @@ services:
     environment:
       - NODE_ENV=development
 
-  # Пример первого бэкенда (FastAPI)
   auth-service:
     build: ./services/auth_service
     ports:
@@ -19,9 +19,32 @@ services:
       - ./services/auth_service:/app
     depends_on:
       - redis
+    environment:
+      - REDIS_HOST=redis
 
-  # Общий Redis для всех
+  shop_service:
+    build: ./services/shop_service
+    ports:
+      - "8001:8000"
+    volumes:
+      - ./services/shop_service:/app
+    depends_on:
+      - redis
+    environment:
+      - REDIS_HOST=redis
+
+  worker_service:
+    build: ./services/worker_service
+    ports:
+      - "8002:8000"
+    volumes:
+      - ./services/worker_service:/app
+    depends_on:
+      - redis
+    environment:
+      - REDIS_HOST=redis
+
   redis:
     image: redis:alpine
-    ports:
+    ports: 
       - "6379:6379"

@@ -11,6 +11,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-@app.get("/")
+@app.get("/shop")
 def read_root():
-    return {"status": "you logged"}
+    return {"status": "thanks for buy"}
